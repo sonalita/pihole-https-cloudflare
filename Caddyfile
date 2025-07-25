@@ -1,0 +1,12 @@
+{
+    email {env.EMAIL_ADDRESS}
+}
+
+pihole.elaginbox.uk {
+    reverse_proxy pihole:80
+
+    tls {
+        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+        ca https://acme-v02.api.letsencrypt.org/directory
+    }
+}

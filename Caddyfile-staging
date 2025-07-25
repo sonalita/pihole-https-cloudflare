@@ -1,0 +1,9 @@
+pihole.elaginbox.uk {
+  reverse_proxy dummy:80
+
+  tls {
+    dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+    email {env.EMAIL_ADDRESS}
+    ca https://acme-staging-v02.api.letsencrypt.org/directory
+  }
+}

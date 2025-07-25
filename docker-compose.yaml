@@ -1,0 +1,47 @@
+
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    environment:
+      TZ: ${TIMEZONE}
+      WEBPASSWORD: ${PIHOLE_WEB_PASSWORD}
+      DNSMASQ_LISTENING: 'all'
+    # Volumes store your data between container upgrades
+    volumes:
+      - './etc-pihole:/etc/pihole'
+      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+#    cap_add:
+#      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    restart: unless-stopped
+
+  caddy:
+    depends_on:
+      - pihole
+    image: ghcr.io/caddybuilds/caddy-cloudflare:latest
+    container_name: caddy
+    environment:
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      - EMAIL_ADDRESS=${EMAIL_ADDRESS}
+    ports:
+      - "443:443"        # HTTPS for Caddy
+    volumes:
+      # Use staging first to test uyopur Cloudflare/Let's Encrypt setup
+      - ./Caddyfile-staging:/etc/caddy/Caddyfile
+      # Comment out staging and uncomment the next line once you have a working setup'
+      #- ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:
+    external: true

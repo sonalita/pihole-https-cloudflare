@@ -32,10 +32,10 @@ services:
     ports:
       - "443:443"        # HTTPS for Caddy
     volumes:
-      # Use staging first to test uyopur Cloudflare/Let's Encrypt setup
-      - ./Caddyfile-staging:/etc/caddy/Caddyfile
+      # Use staging first to test your Cloudflare/Let's Encrypt setup
+      #- ./Caddyfile-staging:/etc/caddy/Caddyfile
       # Comment out staging and uncomment the next line once you have a working setup'
-      #- ./Caddyfile:/etc/caddy/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     restart: unless-stopped

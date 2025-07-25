@@ -2,6 +2,7 @@
 # Pi-hole + Caddy Proxy Docker Setup
 
 This repository contains a Docker Compose configuration to run Pi-hole with a Caddy reverse proxy that handles HTTPS using Let's Encrypt via Cloudflare DNS challenge.
+It is based on the official [docker-pi-hole](https://github.com/pi-hole/docker-pi-hole) project.
 
 ## Prerequisites
 
@@ -50,7 +51,7 @@ volumes:
   - caddy_config:/config
 ```
 
-This way, Caddy will request test certificates that don't count towards rate limits.
+This way, Caddy will request test certificates that will not count towards rate limits.
 
 ### 4. Run the stack
 
@@ -71,18 +72,23 @@ This will launch Pi-hole and Caddy. Pi-hole will listen on DNS ports 53 TCP/UDP,
 - `etc-pihole/` - Persistent Pi-hole config volume
 - `etc-dnsmasq.d/` - Persistent Pi-hole DNS config volume
 
-## License
-
-This project is licensed under the MIT License.
-
 ## .gitignore
 
 Make sure your `.gitignore` contains:
 
 ```
 .env
+etc-pihole/
+etc-dnsmasq.d/
 ```
 
-to keep your environment variables secure.
+to keep your environment variables and your pihole confguration secure.
 
 ---
+
+## Acknowledgements
+
+This project uses the [docker-pi-hole](https://github.com/pi-hole/docker-pi-hole) container image as part of its deployment.  
+The docker-pi-hole project is licensed under the [European Union Public License (EUPL)](https://github.com/pi-hole/docker-pi-hole/blob/master/LICENSE).
+
+This repository does not modify or distribute the Pi-hole image and is independently licensed under the MIT license.
